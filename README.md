@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/viqueen/java-bytecode.svg?style=svg)](https://circleci.com/gh/viqueen/java-bytecode)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=viqueen_java-bytecode&metric=alert_status)](https://sonarcloud.io/dashboard?id=viqueen_java-bytecode)
+
 ## Java Bytecode
 
 I am reviving my old messy Java decompiler that I started writing back when boredom kicked
