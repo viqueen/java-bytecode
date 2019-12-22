@@ -1,6 +1,6 @@
-package org.viqueen.java.bytecode.cpool;
+package org.viqueen.java.bytecode;
 
-import org.viqueen.java.bytecode.ConstantPool;
+import org.viqueen.java.bytecode.cpool.*;
 import org.viqueen.java.datastream.DataStreamCodec;
 
 import java.io.DataInputStream;

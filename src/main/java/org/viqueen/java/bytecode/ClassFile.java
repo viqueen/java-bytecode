@@ -1,6 +1,5 @@
 package org.viqueen.java.bytecode;
 
-import org.viqueen.java.bytecode.cpool.ConstantPoolDataStreamCodec;
 import org.viqueen.java.datastream.Custom;
 import org.viqueen.java.datastream.Unsigned;
 
@@ -48,8 +47,9 @@ public class ClassFile {
 
     @Custom(codec = InterfacesDataStreamCodec.class)
     private Interfaces interfaces;
-
+    @Custom(codec = FieldsDataStreamCodec.class)
     private Fields fields;
+
     private Methods methods;
     private Attributes attributes;
 

@@ -4,10 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.viqueen.java.bytecode.ClassFile;
-import org.viqueen.java.bytecode.ConstantPool;
-import org.viqueen.java.bytecode.Interfaces;
+import org.viqueen.java.bytecode.*;
 import org.viqueen.java.bytecode.cpool.ClassInfo;
+import org.viqueen.java.bytecode.cpool.UTF8Info;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -86,6 +85,38 @@ public class DecompilerTest {
         assertThat(interfaces.getCount(), is(1));
         assertThat(constantPool.get(interfaces.get(0)), instanceOf(ClassInfo.class));
         assertThat(constantPool.getClassName(interfaces.get(0)), is(Serializable.class.getCanonicalName()));
+
+        // fields_count
+        // The value of the fields_count item gives the number of field_info structures in the fields table.
+        // The field_info structures (§4.5) represent all fields, both class variables and instance variables,
+        // declared by this class or interface type.
+        //
+        // fields[]
+        // Each value in the fields table must be a field_info (§4.5) structure giving a complete description of a field
+        // in this class or interface. The fields table includes only those fields that are declared by this class
+        // or interface. It does not include items representing fields that are inherited from superclasses
+        // or superinterfaces.
+        Fields fields = decompiled.getFields();
+        assertThat(fields, notNullValue());
+        assertThat(fields.getCount(), is(1));
+        FieldInfo fieldInfo = fields.getFields().get(0);
+        assertThat(constantPool.get(fieldInfo.getNameIndex(), UTF8Info.class).getValue(), is("name"));
+
+        // methods_count
+        // The value of the methods_count item gives the number of method_info structures in the methods table.
+        //
+        //methods[]
+        // Each value in the methods table must be a method_info (§4.6) structure giving a complete description
+        // of a method in this class or interface. If neither of the ACC_NATIVE and ACC_ABSTRACT flags are
+        // set in the access_flags item of a method_info structure, the Java Virtual Machine instructions
+        // implementing the method are also supplied.
+        //
+        // The method_info structures represent all methods declared by this class or interface type,
+        // including instance methods, class methods, instance initialization methods (§2.9), and any class or
+        // interface initialization method (§2.9). The methods table does not include items representing methods
+        // that are inherited from superclasses or superinterfaces.
+        Methods methods = decompiled.getMethods();
+        assertThat(methods, notNullValue());
 
         // reached end of stream
         assertThat("End of DataInputStream", inputStream.available(), is(0));
