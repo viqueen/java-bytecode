@@ -1,5 +1,7 @@
 package org.viqueen.java.bytecode;
 
+import org.viqueen.java.bytecode.cpool.ConstantPoolDataStreamCodec;
+import org.viqueen.java.datastream.Custom;
 import org.viqueen.java.datastream.Unsigned;
 
 /**
@@ -24,6 +26,7 @@ import org.viqueen.java.datastream.Unsigned;
  *
  * @since 1.0.0
  */
+@SuppressWarnings("unused")
 public class ClassFile {
 
     @Unsigned(type = Unsigned.Type.FOUR)
@@ -32,13 +35,17 @@ public class ClassFile {
     private int minorVersion;
     @Unsigned(type = Unsigned.Type.TWO)
     private int majorVersion;
+
+    @Custom(codec = ConstantPoolDataStreamCodec.class)
     private ConstantPool constantPool;
+
     @Unsigned(type = Unsigned.Type.TWO)
     private int accessFlags;
     @Unsigned(type = Unsigned.Type.TWO)
     private int thisClass;
     @Unsigned(type = Unsigned.Type.TWO)
     private int superClass;
+
     private Interfaces interfaces;
     private Fields fields;
     private Methods methods;

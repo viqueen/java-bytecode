@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.viqueen.java.bytecode.ClassFile;
+import org.viqueen.java.bytecode.ConstantPool;
+import org.viqueen.java.bytecode.cpool.ClassInfo;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -12,8 +14,7 @@ import java.util.Collection;
 import java.util.ServiceLoader;
 
 import static java.util.stream.Collectors.toSet;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
@@ -52,7 +53,23 @@ public class DecompilerTest {
         assertThat("ClassFile#majorVersion", decompiled.getMajorVersion(), is(57));
 
         // constant pool assertions
-        assertThat("ConstantPool", decompiled.getConstantPool(), notNullValue());
+        ConstantPool constantPool = decompiled.getConstantPool();
+        assertThat("ConstantPool", constantPool, notNullValue());
+        assertThat("ConstantPool#count", constantPool.getCount(), is(25));
+
+        // this_class
+        // The value of the this_class item must be a valid index into the constant_pool table.
+        // The constant_pool entry at that index must be a CONSTANT_Class_info structure (§4.4.1)
+        // representing the class or interface defined by this class file.
+        assertThat("ClassFile#thisClass", constantPool.get(decompiled.getThisClass()), instanceOf(ClassInfo.class));
+
+        // super_class
+        // For a class, the value of the super_class item either must be zero or must be a valid index into the constant_pool table.
+        //  If the value of the super_class item is nonzero, the constant_pool entry at that index must be a CONSTANT_Class_info structure (§4.4.1)
+        //  representing the direct superclass of the class defined by this class file
+        assertThat(decompiled.getSuperClass(), not(0));
+        assertThat(constantPool.get(decompiled.getSuperClass()), instanceOf(ClassInfo.class));
+        assertThat(constantPool.getClassName(decompiled.getSuperClass()), is(Object.class.getCanonicalName()));
 
         // reached end of stream
         assertThat("End of DataInputStream", inputStream.available(), is(0));
