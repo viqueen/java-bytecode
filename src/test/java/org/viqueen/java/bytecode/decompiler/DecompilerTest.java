@@ -6,10 +6,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.viqueen.java.bytecode.ClassFile;
 import org.viqueen.java.bytecode.ConstantPool;
+import org.viqueen.java.bytecode.Interfaces;
 import org.viqueen.java.bytecode.cpool.ClassInfo;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.ServiceLoader;
 
@@ -70,6 +72,20 @@ public class DecompilerTest {
         assertThat(decompiled.getSuperClass(), not(0));
         assertThat(constantPool.get(decompiled.getSuperClass()), instanceOf(ClassInfo.class));
         assertThat(constantPool.getClassName(decompiled.getSuperClass()), is(Object.class.getCanonicalName()));
+
+        // interfaces_count
+        // The value of the interfaces_count item gives the number of direct superinterfaces of this class or interface type.
+        //
+        // interfaces[]
+        // Each value in the interfaces array must be a valid index into the constant_pool table.
+        // The constant_pool entry at each value of interfaces[i], where 0 ≤ i < interfaces_count, must be a CONSTANT_Class_info structure (§4.4.1)
+        // representing an interface that is a direct superinterface of this class or interface type,
+        // in the left-to-right order given in the source for the type.
+        Interfaces interfaces = decompiled.getInterfaces();
+        assertThat(interfaces, notNullValue());
+        assertThat(interfaces.getCount(), is(1));
+        assertThat(constantPool.get(interfaces.get(0)), instanceOf(ClassInfo.class));
+        assertThat(constantPool.getClassName(interfaces.get(0)), is(Serializable.class.getCanonicalName()));
 
         // reached end of stream
         assertThat("End of DataInputStream", inputStream.available(), is(0));

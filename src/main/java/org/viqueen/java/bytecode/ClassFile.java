@@ -46,7 +46,9 @@ public class ClassFile {
     @Unsigned(type = Unsigned.Type.TWO)
     private int superClass;
 
+    @Custom(codec = InterfacesDataStreamCodec.class)
     private Interfaces interfaces;
+
     private Fields fields;
     private Methods methods;
     private Attributes attributes;
