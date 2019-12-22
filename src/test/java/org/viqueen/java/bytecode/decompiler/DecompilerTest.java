@@ -55,6 +55,6 @@ public class DecompilerTest {
         assertThat("ConstantPool", decompiled.getConstantPool(), notNullValue());
 
         // reached end of stream
-        assertThat(inputStream.available(), is(0));
+        assertThat("End of DataInputStream", inputStream.available(), is(0));
     }
 }

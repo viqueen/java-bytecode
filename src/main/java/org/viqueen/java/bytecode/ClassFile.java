@@ -1,5 +1,7 @@
 package org.viqueen.java.bytecode;
 
+import org.viqueen.java.datastream.Unsigned;
+
 /**
  * ClassFile {
  *     u4             magic;
@@ -24,12 +26,18 @@ package org.viqueen.java.bytecode;
  */
 public class ClassFile {
 
+    @Unsigned(type = Unsigned.Type.FOUR)
     private int magic;
+    @Unsigned(type = Unsigned.Type.TWO)
     private int minorVersion;
+    @Unsigned(type = Unsigned.Type.TWO)
     private int majorVersion;
     private ConstantPool constantPool;
+    @Unsigned(type = Unsigned.Type.TWO)
     private int accessFlags;
+    @Unsigned(type = Unsigned.Type.TWO)
     private int thisClass;
+    @Unsigned(type = Unsigned.Type.TWO)
     private int superClass;
     private Interfaces interfaces;
     private Fields fields;
